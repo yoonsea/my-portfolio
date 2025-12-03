@@ -21,6 +21,28 @@ const experiences = [
       'CI/CD 파이프라인 구축 및 자동화',
     ],
   },
+  {
+    year: '2024.01 - 현재',
+    position: '시니어 프론트엔드 개발자',
+    company: '○○스타트업',
+    description: 'Next.js 기반의 모던 웹 애플리케이션 개발 및 팀 리더십을 담당하고 있습니다.',
+    achievements: [
+      '새로운 프로젝트의 기술 스택 선정 및 아키텍처 설계',
+      '주니어 개발자 멘토링 및 코드 리뷰',
+      'CI/CD 파이프라인 구축 및 자동화',
+    ],
+  },
+  {
+    year: '2024.01 - 현재',
+    position: '시니어 프론트엔드 개발자',
+    company: '○○스타트업',
+    description: 'Next.js 기반의 모던 웹 애플리케이션 개발 및 팀 리더십을 담당하고 있습니다.',
+    achievements: [
+      '새로운 프로젝트의 기술 스택 선정 및 아키텍처 설계',
+      '주니어 개발자 멘토링 및 코드 리뷰',
+      'CI/CD 파이프라인 구축 및 자동화',
+    ],
+  },
 ];
 
 export function Experience() {
@@ -33,7 +55,7 @@ export function Experience() {
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-8 sm:mb-12">
           Experience
         </h2>
-        <div className="space-y-8">
+        <div className="space-y-8 max-h-[800px] overflow-y-auto pr-2">
           {experiences.map((exp, index) => (
             <div
               key={index}

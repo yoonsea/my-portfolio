@@ -1,12 +1,12 @@
 const skills = [
-  { name: 'React', level: 90, color: 'from-blue-500 to-blue-600' },
-  { name: 'Next.js', level: 85, color: 'from-gray-700 to-gray-900' },
-  { name: 'TypeScript', level: 88, color: 'from-blue-600 to-blue-700' },
+  { name: 'C++', level: 90, color: 'from-blue-500 to-blue-600' },
+  { name: 'C#', level: 100, color: 'from-red-500 to-red-600' },
+  { name: 'Java', level: 88, color: 'from-blue-600 to-blue-700' },
   { name: 'JavaScript', level: 92, color: 'from-yellow-400 to-yellow-500' },
-  { name: 'Tailwind CSS', level: 90, color: 'from-cyan-400 to-cyan-500' },
-  { name: 'Node.js', level: 75, color: 'from-green-500 to-green-600' },
-  { name: 'Git', level: 85, color: 'from-orange-500 to-orange-600' },
-  { name: 'UI/UX Design', level: 80, color: 'from-pink-500 to-pink-600' },
+  { name: 'Python', level: 70, color: 'from-blue-600 to-blue-700' },
+  { name: 'Unity', level: 85, color: 'from-orange-500 to-orange-600' },
+  { name: 'Unreal Engine', level: 80, color: 'from-pink-500 to-pink-600' },
+  { name: 'AI', level: 50, color: 'from-cyan-400 to-cyan-500' },
 ];
 
 export function Skills() {
