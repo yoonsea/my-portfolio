@@ -5,11 +5,19 @@ import { useTheme } from './ThemeProvider';
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Theme toggle clicked, current theme:', theme);
+    toggleTheme();
+  };
+
   return (
     <button
-      onClick={toggleTheme}
-      className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      onClick={handleClick}
+      className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 z-10"
       aria-label="Toggle theme"
+      type="button"
     >
       {theme === 'light' ? (
         <svg
@@ -18,7 +26,7 @@ export function ThemeToggle() {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-5 h-5 text-gray-900"
+          className="w-5 h-5 text-gray-900 dark:text-gray-100"
         >
           <path
             strokeLinecap="round"

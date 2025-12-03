@@ -1,6 +1,5 @@
 'use client';
 
-import { ThemeToggle } from './ThemeToggle';
 import { useState, useEffect } from 'react';
 
 export function Header() {
@@ -51,33 +50,44 @@ export function Header() {
         </button>
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4 lg:gap-6">
             <button
               onClick={() => scrollToSection('about')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
             >
               About
             </button>
             <button
               onClick={() => scrollToSection('skills')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
             >
               Skills
             </button>
             <button
+              onClick={() => scrollToSection('education')}
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
+            >
+              Education
+            </button>
+            <button
+              onClick={() => scrollToSection('experience')}
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
+            >
+              Experience
+            </button>
+            <button
               onClick={() => scrollToSection('projects')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
             >
               Projects
             </button>
             <button
               onClick={() => scrollToSection('contact')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
             >
               Contact
             </button>
           </div>
-          <ThemeToggle />
           
           {/* Mobile Menu Button */}
           <button
@@ -127,6 +137,18 @@ export function Header() {
               className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
               Skills
+            </button>
+            <button
+              onClick={() => scrollToSection('education')}
+              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              Education
+            </button>
+            <button
+              onClick={() => scrollToSection('experience')}
+              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              Experience
             </button>
             <button
               onClick={() => scrollToSection('projects')}

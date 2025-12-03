@@ -11,12 +11,12 @@ export function About() {
         <div className="max-w-3xl mx-auto">
           <div className="space-y-4 sm:space-y-6 text-gray-700 dark:text-gray-300">
             <p className="text-base sm:text-lg leading-relaxed">
-              안녕하세요! 프론트엔드 개발자로서 사용자 경험과 코드 품질을 중시하며,
-              최신 기술을 활용해 혁신적인 웹 애플리케이션을 개발하고 있습니다.
+              안녕하세요! 풀스택, 3D 개발자로서 사용자 경험과 코드 품질을 중시하며,
+              최신 기술을 활용해 혁신적인 웹 애플리케이션과 3D 애플리케이션을 개발하고 있습니다.
             </p>
             <p className="text-base sm:text-lg leading-relaxed">
-              React, Next.js, TypeScript를 주로 사용하며, 반응형 디자인과 접근성을
-              고려한 웹 개발에 관심이 많습니다.
+              C++, C#, Java, Python, JavaScript, TypeScript, React 를 주로 사용하며, 반응형 디자인과 접근성을
+              고려한 웹 개발과 Unity, Unreal 등 3D 개발에 관심이 많습니다.
             </p>
             <div className="pt-2 sm:pt-4">
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
@@ -25,7 +25,7 @@ export function About() {
               <ul className="space-y-2 sm:space-y-2">
                 <li className="flex items-center gap-2 text-sm sm:text-base">
                   <span className="text-blue-600 dark:text-blue-400">✓</span>
-                  사용자 중심의 UI/UX 디자인
+                  3D 어플리케이션 개발
                 </li>
                 <li className="flex items-center gap-2 text-sm sm:text-base">
                   <span className="text-blue-600 dark:text-blue-400">✓</span>

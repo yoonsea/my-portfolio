@@ -6,17 +6,17 @@ export function Hero() {
     >
       <div className="max-w-4xl mx-auto text-center">
         <div className="mb-4 sm:mb-6 animate-fade-in">
-          <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
-            👋 안녕하세요, 개발자입니다
+          <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-base sm:text-lg font-medium mb-4 sm:mb-6">
+            안녕하세요, 최윤석 입니다.
           </div>
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-4 animate-slide-up">
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-            프론트엔드 개발자
+            풀스택, 3D 개발자
           </span>
         </h1>
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 px-4 animate-slide-up-delay">
-          사용자 경험을 중시하며, 아름답고 효율적인 웹 애플리케이션을 만듭니다.
+          사용자 경험을 중시하며, 아름답고 효율적인 웹, 3D 애플리케이션을 만듭니다.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 animate-fade-in-delay">
           <a
