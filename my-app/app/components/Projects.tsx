@@ -20,6 +20,7 @@ export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
 
   useEffect(() => {
     async function fetchProjects() {
@@ -27,7 +28,7 @@ export function Projects() {
         const { data, error } = await supabase
           .from('projects')
           .select('*')
-          .order('order_index', { ascending: true });
+          .order('order_index', { ascending: false });
 
         if (error) throw error;
         setProjects(data || []);
@@ -51,11 +52,45 @@ export function Projects() {
     setCurrentPage(page);
     // 스크롤을 약간 지연시켜 상태 업데이트 후 실행
     setTimeout(() => {
-      const projectsSection = document.getElementById('projects');
-      if (projectsSection) {
-        projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     }, 100);
+  };
+
+  const updateImageIndex = (projectId: string, nextIndex: number) => {
+    setImageIndexes((prev) => ({
+      ...prev,
+      [projectId]: nextIndex,
+    }));
+  };
+
+  const parseImageUrls = (value: string | null): string[] => {
+    if (!value) return [];
+    const trimmed = value.trim();
+
+    if (!trimmed) return [];
+
+    if (trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.filter((url) => typeof url === 'string' && url.trim());
+        }
+      } catch {
+        // fall through to other parsing strategies
+      }
+    }
+
+    if (trimmed.includes(',')) {
+      return trimmed
+        .split(',')
+        .map((url) => url.trim())
+        .filter(Boolean);
+    }
+
+    return [trimmed];
   };
 
   return (
@@ -75,28 +110,75 @@ export function Projects() {
           </div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
-              {currentProjects.map((project) => (
-                <div
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
+              {currentProjects.map((project) => {
+                const imageUrls = parseImageUrls(project.image_url);
+                const currentImageIndex = imageIndexes[project.id] ?? 0;
+                const currentImageUrl = imageUrls[currentImageIndex];
+
+                return (
+            <div
                   key={project.id}
-                  className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div className="h-40 sm:h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-5xl sm:text-6xl">
-                    {project.image_url ? (
+              className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+            >
+              <div className="relative h-40 sm:h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-5xl sm:text-6xl overflow-hidden">
+                    {currentImageUrl ? (
                       <img
-                        src={project.image_url}
+                        src={currentImageUrl}
                         alt={project.title}
                         className="w-full h-full object-cover"
                       />
                     ) : (
                       project.image || '💼'
                     )}
-                  </div>
+                    {imageUrls.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="이전 이미지"
+                          onClick={() => {
+                            const prevIndex =
+                              (currentImageIndex - 1 + imageUrls.length) % imageUrls.length;
+                            updateImageIndex(project.id, prevIndex);
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="다음 이미지"
+                          onClick={() => {
+                            const nextIndex = (currentImageIndex + 1) % imageUrls.length;
+                            updateImageIndex(project.id, nextIndex);
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
+                          {imageUrls.map((_, index) => (
+                            <button
+                              key={`${project.id}-dot-${index}`}
+                              type="button"
+                              aria-label={`이미지 ${index + 1}번으로 이동`}
+                              onClick={() => updateImageIndex(project.id, index)}
+                              className={`h-1.5 w-1.5 rounded-full transition-all ${
+                                index === currentImageIndex
+                                  ? 'bg-white'
+                                  : 'bg-white/50 hover:bg-white/80'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+              </div>
               <div className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2 sm:mb-3">
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-                    {project.title}
-                  </h3>
+                  {project.title}
+                </h3>
                   {project.period && (
                     <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
                       {project.period}
@@ -117,30 +199,31 @@ export function Projects() {
                   ))}
                 </div>
               </div>
-              </div>
-            ))}
-          </div>
+            </div>
+          );
+        })}
+        </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
+        {/* Pagination */}
+        {totalPages > 1 && (
             <div className="flex justify-center items-center gap-1.5 sm:gap-2 flex-wrap relative z-10">
-              <button
+            <button
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   goToPage(currentPage - 1);
                 }}
-                disabled={currentPage === 1}
-                className="px-3 sm:px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all"
-              >
-                이전
-              </button>
-              
-              <div className="flex gap-1.5 sm:gap-2">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
+              disabled={currentPage === 1}
+              className="px-3 sm:px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all"
+            >
+              이전
+            </button>
+            
+            <div className="flex gap-1.5 sm:gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
@@ -148,29 +231,29 @@ export function Projects() {
                       goToPage(page);
                     }}
                     className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-all active:scale-95 cursor-pointer ${
-                      currentPage === page
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
+                    currentPage === page
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
 
-              <button
+            <button
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   goToPage(currentPage + 1);
                 }}
-                disabled={currentPage === totalPages}
-                className="px-3 sm:px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all"
-              >
-                다음
-              </button>
-            </div>
+              disabled={currentPage === totalPages}
+              className="px-3 sm:px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all"
+            >
+              다음
+            </button>
+          </div>
           )}
           </>
         )}

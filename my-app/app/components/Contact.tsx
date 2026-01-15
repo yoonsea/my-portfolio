@@ -19,7 +19,7 @@ export function Contact() {
             >
               <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">📧</div>
               <div className="font-semibold text-gray-900 dark:text-white text-lg sm:text-xl mb-2">Email</div>
-              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 break-all text-center">yoonseok84@gmail.com</div>
+              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 break-all text-center">yoonsea@naver.com</div>
             </a>
           </div>
         </div>
