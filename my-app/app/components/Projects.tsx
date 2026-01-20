@@ -21,6 +21,35 @@ export function Projects() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
+  const [popupProjectId, setPopupProjectId] = useState<string | null>(null);
+  const [popupImageIndex, setPopupImageIndex] = useState(0);
+
+  const parseImageUrls = (value: string | null): string[] => {
+    if (!value) return [];
+    const trimmed = value.trim();
+
+    if (!trimmed) return [];
+
+    if (trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.filter((url) => typeof url === 'string' && url.trim());
+        }
+      } catch {
+        // fall through to other parsing strategies
+      }
+    }
+
+    if (trimmed.includes(',')) {
+      return trimmed
+        .split(',')
+        .map((url) => url.trim())
+        .filter(Boolean);
+    }
+
+    return [trimmed];
+  };
 
   useEffect(() => {
     async function fetchProjects() {
@@ -31,7 +60,15 @@ export function Projects() {
           .order('order_index', { ascending: false });
 
         if (error) throw error;
-        setProjects(data || []);
+        const sorted = (data || []).slice().sort((a, b) => {
+          const aHasImage = parseImageUrls(a.image_url).length > 0;
+          const bHasImage = parseImageUrls(b.image_url).length > 0;
+
+          if (aHasImage === bHasImage) return 0;
+          return aHasImage ? -1 : 1;
+        });
+
+        setProjects(sorted);
       } catch (error) {
         console.error('Error fetching projects:', error);
       } finally {
@@ -66,31 +103,14 @@ export function Projects() {
     }));
   };
 
-  const parseImageUrls = (value: string | null): string[] => {
-    if (!value) return [];
-    const trimmed = value.trim();
+  const openPopup = (projectId: string, startIndex: number) => {
+    setPopupProjectId(projectId);
+    setPopupImageIndex(startIndex);
+  };
 
-    if (!trimmed) return [];
-
-    if (trimmed.startsWith('[')) {
-      try {
-        const parsed = JSON.parse(trimmed);
-        if (Array.isArray(parsed)) {
-          return parsed.filter((url) => typeof url === 'string' && url.trim());
-        }
-      } catch {
-        // fall through to other parsing strategies
-      }
-    }
-
-    if (trimmed.includes(',')) {
-      return trimmed
-        .split(',')
-        .map((url) => url.trim())
-        .filter(Boolean);
-    }
-
-    return [trimmed];
+  const closePopup = () => {
+    setPopupProjectId(null);
+    setPopupImageIndex(0);
   };
 
   return (
@@ -119,7 +139,11 @@ export function Projects() {
                 return (
             <div
                   key={project.id}
-              className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+              className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              onClick={() => {
+                if (imageUrls.length === 0) return;
+                openPopup(project.id, currentImageIndex);
+              }}
             >
               <div className="relative h-40 sm:h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-5xl sm:text-6xl overflow-hidden">
                     {currentImageUrl ? (
@@ -136,7 +160,8 @@ export function Projects() {
                         <button
                           type="button"
                           aria-label="이전 이미지"
-                          onClick={() => {
+                          onClick={(event) => {
+                            event.stopPropagation();
                             const prevIndex =
                               (currentImageIndex - 1 + imageUrls.length) % imageUrls.length;
                             updateImageIndex(project.id, prevIndex);
@@ -148,7 +173,8 @@ export function Projects() {
                         <button
                           type="button"
                           aria-label="다음 이미지"
-                          onClick={() => {
+                          onClick={(event) => {
+                            event.stopPropagation();
                             const nextIndex = (currentImageIndex + 1) % imageUrls.length;
                             updateImageIndex(project.id, nextIndex);
                           }}
@@ -162,7 +188,10 @@ export function Projects() {
                               key={`${project.id}-dot-${index}`}
                               type="button"
                               aria-label={`이미지 ${index + 1}번으로 이동`}
-                              onClick={() => updateImageIndex(project.id, index)}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                updateImageIndex(project.id, index);
+                              }}
                               className={`h-1.5 w-1.5 rounded-full transition-all ${
                                 index === currentImageIndex
                                   ? 'bg-white'
@@ -255,6 +284,97 @@ export function Projects() {
             </button>
           </div>
           )}
+        {popupProjectId && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+            onClick={closePopup}
+          >
+            <div
+              className="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                aria-label="팝업 닫기"
+                onClick={closePopup}
+                className="absolute right-3 top-3 z-10 rounded-full bg-black/60 text-white w-9 h-9 flex items-center justify-center"
+              >
+                ×
+              </button>
+              {(() => {
+                const popupProject = projects.find(
+                  (project) => project.id === popupProjectId,
+                );
+                const popupImages = popupProject
+                  ? parseImageUrls(popupProject.image_url)
+                  : [];
+                const popupImage = popupImages[popupImageIndex];
+
+                if (!popupProject || popupImages.length === 0 || !popupImage) {
+                  return (
+                    <div className="p-6 text-center text-gray-600 dark:text-gray-300">
+                      표시할 이미지가 없습니다.
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="relative bg-black">
+                    <img
+                      src={popupImage}
+                      alt={popupProject.title}
+                      className="w-full max-h-[80vh] object-contain"
+                    />
+                    {popupImages.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="이전 이미지"
+                          onClick={() =>
+                            setPopupImageIndex(
+                              (popupImageIndex - 1 + popupImages.length) %
+                                popupImages.length,
+                            )
+                          }
+                          className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 text-white w-10 h-10 flex items-center justify-center"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="다음 이미지"
+                          onClick={() =>
+                            setPopupImageIndex(
+                              (popupImageIndex + 1) % popupImages.length,
+                            )
+                          }
+                          className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 text-white w-10 h-10 flex items-center justify-center"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                          {popupImages.map((_, index) => (
+                            <button
+                              key={`${popupProject.id}-popup-dot-${index}`}
+                              type="button"
+                              aria-label={`팝업 이미지 ${index + 1}번으로 이동`}
+                              onClick={() => setPopupImageIndex(index)}
+                              className={`h-2 w-2 rounded-full transition-all ${
+                                index === popupImageIndex
+                                  ? 'bg-white'
+                                  : 'bg-white/50 hover:bg-white/80'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
           </>
         )}
       </div>
