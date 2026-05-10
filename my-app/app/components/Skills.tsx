@@ -1,12 +1,14 @@
 const skills = [
-  { name: 'C++', level: 90, color: 'from-blue-500 to-blue-600' },
+  { name: 'C++', level: 100, color: 'from-blue-500 to-blue-600' },
   { name: 'C#', level: 100, color: 'from-red-500 to-red-600' },
-  { name: 'Java', level: 88, color: 'from-blue-600 to-blue-700' },
-  { name: 'JavaScript', level: 92, color: 'from-yellow-400 to-yellow-500' },
+  { name: 'Java', level: 100, color: 'from-indigo-500 to-indigo-600' },
+  { name: 'JavaScript', level: 100, color: 'from-yellow-400 to-yellow-500' },
   { name: 'Python', level: 70, color: 'from-blue-600 to-blue-700' },
   { name: 'Unity', level: 85, color: 'from-orange-500 to-orange-600' },
   { name: 'Unreal Engine', level: 80, color: 'from-pink-500 to-pink-600' },
-  { name: 'AI', level: 50, color: 'from-cyan-400 to-cyan-500' },
+  { name: 'AI', level: 70, color: 'from-cyan-400 to-cyan-500' },
+  { name: 'iOS', level: 80, color: 'from-violet-500 to-violet-600' },
+  { name: 'Android', level: 80, color: 'from-green-500 to-green-600' },
 ];
 
 export function Skills() {
