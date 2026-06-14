@@ -37,6 +37,9 @@ const categories: { name: string; skills: { name: string; tier: Tier }[] }[] = [
     skills: [
       { name: 'iOS', tier: '능숙' },
       { name: 'Android', tier: '능숙' },
+      { name: 'Swift', tier: '능숙' },
+      { name: 'React Native', tier: '경험' },
+      { name: 'Flutter', tier: '경험' },
     ],
   },
   {

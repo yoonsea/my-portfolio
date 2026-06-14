@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "최윤석 | 풀스택 · 3D 개발자",
-  description: "풀스택, 3D 개발자 최윤석의 포트폴리오",
+  title: "최윤석 | 풀스택 · 앱 · 3D 개발자",
+  description: "풀스택, 앱, 3D 개발자 최윤석의 포트폴리오",
 };
 
 export default function RootLayout({

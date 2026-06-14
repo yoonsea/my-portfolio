@@ -1,6 +1,7 @@
 import { Reveal } from './Reveal';
 
 const interests = [
+  'iOS · Android 앱 개발',
   '3D 어플리케이션 개발',
   '성능 최적화 및 웹 접근성',
   '클린 코드와 테스트 주도 개발',
@@ -24,13 +25,19 @@ export function About() {
           <Reveal className="md:col-span-3">
             <div className="space-y-5 text-gray-400">
               <p className="text-base sm:text-lg leading-relaxed">
-                안녕하세요! 풀스택, 3D 개발자로서 사용자 경험과 코드 품질을 중시하며, 최신 기술을 활용해
-                혁신적인 웹 애플리케이션과 3D 애플리케이션을 개발하고 있습니다.
+                안녕하세요! 풀스택, 앱, 3D 개발자로서 사용자 경험과 코드 품질을 중시하며, 최신 기술을
+                활용해 혁신적인 웹과 모바일 앱, 3D 애플리케이션을 개발하고 있습니다.
               </p>
               <p className="text-base sm:text-lg leading-relaxed">
                 <span className="text-gray-200">C++, C#, Java, Python, JavaScript, TypeScript, React</span>{' '}
                 를 주로 사용하며, 반응형 디자인과 접근성을 고려한 웹 개발과{' '}
                 <span className="text-gray-200">Unity, Unreal</span> 등 3D 개발에 관심이 많습니다.
+              </p>
+              <p className="text-base sm:text-lg leading-relaxed">
+                모바일 영역에서는 <span className="text-gray-200">iOS와 Android</span> 네이티브 앱을
+                개발하며, 직관적인 UI와 부드러운 성능을 함께 잡는 것을 목표로 합니다. 또한{' '}
+                <span className="text-gray-200">Unity</span>를 활용한 인터랙티브·3D 모바일 앱처럼, 웹과
+                앱, 3D 경험을 자연스럽게 잇는 작업에 특히 관심이 많습니다.
               </p>
             </div>
           </Reveal>

@@ -27,12 +27,12 @@ export function Hero() {
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 sm:mb-6 px-4 animate-slide-up leading-[1.1]">
           <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">
-            풀스택 · 3D 개발자
+            풀스택 · 앱 · 3D 개발자
           </span>
         </h1>
 
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-8 sm:mb-10 px-4 max-w-2xl mx-auto animate-slide-up-delay leading-relaxed">
-          사용자 경험을 중시하며, 아름답고 효율적인 웹과 3D 애플리케이션을 만듭니다.
+          사용자 경험을 중시하며, 아름답고 효율적인 웹, 모바일 앱, 3D 애플리케이션을 만듭니다.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 animate-fade-in-delay">
