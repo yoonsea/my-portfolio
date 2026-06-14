@@ -1,3 +1,5 @@
+import { Reveal } from './Reveal';
+
 const education = [
   {
     year: '2002 - 2010',
@@ -9,42 +11,37 @@ const education = [
 
 export function Education() {
   return (
-    <section
-      id="education"
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white dark:bg-gray-800"
-    >
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-8 sm:mb-12">
-          Education
-        </h2>
+    <section id="education" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 bg-[#08080c]">
+      <div className="max-w-5xl mx-auto">
+        <Reveal>
+          <p className="font-mono text-xs sm:text-sm tracking-[0.3em] text-cyan-400 mb-3">
+            03 / EDUCATION
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-10 sm:mb-14">
+            Education
+          </h2>
+        </Reveal>
+
         <div className="space-y-8">
           {education.map((item, index) => (
-            <div
-              key={index}
-              className="relative pl-8 sm:pl-12 pb-8 border-l-2 border-gray-200 dark:border-gray-700 last:border-0 last:pb-0"
-            >
-              <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-blue-600 dark:bg-blue-400 border-4 border-white dark:border-gray-800" />
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-                    {item.degree}
-                  </h3>
-                  <p className="text-base sm:text-lg text-blue-600 dark:text-blue-400 font-medium">
-                    {item.school}
-                  </p>
+            <Reveal key={index}>
+              <div className="relative pl-8 sm:pl-10 pb-2 border-l border-white/10 last:border-0">
+                <span className="absolute -left-[7px] top-1 h-3.5 w-3.5 rounded-full bg-cyan-400 shadow-[0_0_12px_2px_rgba(34,211,238,0.6)]" />
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-semibold text-white">{item.degree}</h3>
+                    <p className="text-base sm:text-lg text-cyan-400 font-medium">{item.school}</p>
+                  </div>
+                  <span className="font-mono text-sm text-gray-500 whitespace-nowrap">
+                    {item.year}
+                  </span>
                 </div>
-                <span className="text-sm sm:text-base text-gray-500 dark:text-gray-400 font-medium whitespace-nowrap">
-                  {item.year}
-                </span>
+                <p className="text-sm sm:text-base text-gray-400 mt-2">{item.description}</p>
               </div>
-              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-2">
-                {item.description}
-              </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
     </section>
   );
 }
-

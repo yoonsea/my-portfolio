@@ -1,48 +1,95 @@
-const skills = [
-  { name: 'C++', level: 100, color: 'from-blue-500 to-blue-600' },
-  { name: 'C#', level: 100, color: 'from-red-500 to-red-600' },
-  { name: 'Java', level: 100, color: 'from-indigo-500 to-indigo-600' },
-  { name: 'JavaScript', level: 100, color: 'from-yellow-400 to-yellow-500' },
-  { name: 'Python', level: 70, color: 'from-blue-600 to-blue-700' },
-  { name: 'Unity', level: 85, color: 'from-orange-500 to-orange-600' },
-  { name: 'Unreal Engine', level: 80, color: 'from-pink-500 to-pink-600' },
-  { name: 'AI', level: 70, color: 'from-cyan-400 to-cyan-500' },
-  { name: 'iOS', level: 80, color: 'from-violet-500 to-violet-600' },
-  { name: 'Android', level: 80, color: 'from-green-500 to-green-600' },
+import { Reveal } from './Reveal';
+
+type Tier = '주력' | '능숙' | '경험';
+
+const tierStyles: Record<Tier, string> = {
+  주력: 'border-cyan-400/40 bg-cyan-400/10 text-cyan-200',
+  능숙: 'border-violet-400/40 bg-violet-400/10 text-violet-200',
+  경험: 'border-white/15 bg-white/5 text-gray-300',
+};
+
+const tierDot: Record<Tier, string> = {
+  주력: 'bg-cyan-400',
+  능숙: 'bg-violet-400',
+  경험: 'bg-gray-500',
+};
+
+const categories: { name: string; skills: { name: string; tier: Tier }[] }[] = [
+  {
+    name: 'Languages',
+    skills: [
+      { name: 'C++', tier: '주력' },
+      { name: 'C#', tier: '주력' },
+      { name: 'Java', tier: '주력' },
+      { name: 'JavaScript', tier: '주력' },
+      { name: 'Python', tier: '경험' },
+    ],
+  },
+  {
+    name: 'Game · 3D',
+    skills: [
+      { name: 'Unity', tier: '능숙' },
+      { name: 'Unreal Engine', tier: '능숙' },
+    ],
+  },
+  {
+    name: 'Mobile',
+    skills: [
+      { name: 'iOS', tier: '능숙' },
+      { name: 'Android', tier: '능숙' },
+    ],
+  },
+  {
+    name: 'AI',
+    skills: [{ name: 'AI / ML', tier: '경험' }],
+  },
 ];
 
 export function Skills() {
   return (
-    <section
-      id="skills"
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50 dark:bg-gray-900"
-    >
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-8 sm:mb-12">
-          Skills
-        </h2>
-        <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-          {skills.map((skill) => (
-            <div key={skill.name} className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-sm">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white">
-                  {skill.name}
+    <section id="skills" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 bg-white/[0.015]">
+      <div className="max-w-5xl mx-auto">
+        <Reveal>
+          <p className="font-mono text-xs sm:text-sm tracking-[0.3em] text-cyan-400 mb-3">
+            02 / SKILLS
+          </p>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">Skills</h2>
+            {/* Legend */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-400">
+              {(['주력', '능숙', '경험'] as Tier[]).map((tier) => (
+                <span key={tier} className="inline-flex items-center gap-1.5">
+                  <span className={`h-2 w-2 rounded-full ${tierDot[tier]}`} />
+                  {tier}
                 </span>
-                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  {skill.level}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 sm:h-3 overflow-hidden">
-                <div
-                  className={`h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1000 ease-out`}
-                  style={{ width: `${skill.level}%` }}
-                />
-              </div>
+              ))}
             </div>
+          </div>
+        </Reveal>
+
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+          {categories.map((category, i) => (
+            <Reveal key={category.name} delay={i * 100}>
+              <div className="h-full rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 hover:border-white/20 transition-colors">
+                <h3 className="font-mono text-sm tracking-widest text-gray-300 mb-4">
+                  {category.name}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium ${tierStyles[skill.tier]}`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${tierDot[skill.tier]}`} />
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
     </section>
   );
 }
-

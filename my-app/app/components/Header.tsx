@@ -2,6 +2,15 @@
 
 import { useState, useEffect } from 'react';
 
+const NAV_ITEMS = [
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'education', label: 'Education' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'contact', label: 'Contact' },
+];
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,11 +24,7 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -37,135 +42,75 @@ export function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm'
-          : 'bg-transparent'
+          ? 'bg-[#08080c]/80 backdrop-blur-md border-b border-white/10'
+          : 'bg-transparent border-b border-transparent'
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         <button
           onClick={() => scrollToSection('home')}
-          className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 text-lg sm:text-xl font-bold text-white hover:opacity-80 transition-opacity"
         >
-          Portfolio
+          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_2px_rgba(34,211,238,0.7)]" />
+          <span>
+            Portfolio<span className="text-cyan-400">.</span>
+          </span>
         </button>
+
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-6">
-            <button
-              onClick={() => scrollToSection('about')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              About
-            </button>
-            <button
-              onClick={() => scrollToSection('skills')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              Skills
-            </button>
-            <button
-              onClick={() => scrollToSection('education')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              Education
-            </button>
-            <button
-              onClick={() => scrollToSection('experience')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              Experience
-            </button>
-            <button
-              onClick={() => scrollToSection('projects')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              Projects
-            </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-sm lg:text-base"
-            >
-              Contact
-            </button>
+          <div className="hidden md:flex items-center gap-5 lg:gap-7">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="relative text-sm lg:text-base text-gray-400 hover:text-white transition-colors after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-cyan-400 hover:after:w-full after:transition-all after:duration-300"
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
-          
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6 text-gray-900 dark:text-white"
-              >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6 text-white"
+            >
+              {isMobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6 text-gray-900 dark:text-white"
-              >
+              ) : (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
+              )}
+            </svg>
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[60px] bg-white dark:bg-gray-900 z-40">
-          <div className="flex flex-col p-6 space-y-4">
-            <button
-              onClick={() => scrollToSection('about')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              About
-            </button>
-            <button
-              onClick={() => scrollToSection('skills')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              Skills
-            </button>
-            <button
-              onClick={() => scrollToSection('education')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              Education
-            </button>
-            <button
-              onClick={() => scrollToSection('experience')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              Experience
-            </button>
-            <button
-              onClick={() => scrollToSection('projects')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              Projects
-            </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="text-left px-4 py-3 text-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              Contact
-            </button>
+        <div className="md:hidden fixed inset-0 top-[60px] bg-[#08080c] z-40">
+          <div className="flex flex-col p-6 space-y-2">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="text-left px-4 py-3 text-lg font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
         </div>
       )}
     </header>
   );
 }
-

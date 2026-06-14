@@ -18,8 +18,10 @@ export default function Home() {
       <Experience />
       <Projects />
       <Contact />
-      <footer className="py-6 sm:py-8 px-4 sm:px-6 bg-gray-900 dark:bg-black text-center text-gray-400">
-        <p className="text-sm sm:text-base">© 2026 Portfolio. All rights reserved.</p>
+      <footer className="py-8 sm:py-10 px-4 sm:px-6 border-t border-white/10 bg-[#08080c] text-center">
+        <p className="font-mono text-xs sm:text-sm text-gray-500">
+          © 2026 최윤석 · Built with Next.js
+        </p>
       </footer>
     </main>
   );
