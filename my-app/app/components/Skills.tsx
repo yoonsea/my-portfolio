@@ -44,7 +44,10 @@ const categories: { name: string; skills: { name: string; tier: Tier }[] }[] = [
   },
   {
     name: 'AI',
-    skills: [{ name: 'AI / ML', tier: '경험' }],
+    skills: [
+      { name: 'AI / ML', tier: '경험' },
+      { name: '바이브 코딩', tier: '능숙' },
+    ],
   },
 ];
 
