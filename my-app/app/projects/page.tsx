@@ -34,6 +34,11 @@ export default function ProjectsGallery() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<{ project: Project; imageIndex: number } | null>(null);
   const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+
+  const markImageLoaded = (url: string) => {
+    setLoadedImages((prev) => (prev[url] ? prev : { ...prev, [url]: true }));
+  };
 
   useEffect(() => {
     async function fetchProjects() {
@@ -140,11 +145,31 @@ export default function ProjectsGallery() {
                 >
                   {/* Full-bleed image */}
                   {currentImg ? (
-                    <img
-                      src={currentImg}
-                      alt={project.title}
-                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    />
+                    <>
+                      {!loadedImages[currentImg] && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                          <svg
+                            className="w-7 h-7 animate-spin text-white/40"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z" />
+                          </svg>
+                        </div>
+                      )}
+                      <img
+                        key={currentImg}
+                        src={currentImg}
+                        alt={project.title}
+                        onLoad={() => markImageLoaded(currentImg)}
+                        onError={() => markImageLoaded(currentImg)}
+                        className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 group-hover:scale-105 ${
+                          loadedImages[currentImg] ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
+                    </>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-7xl bg-linear-to-br from-blue-600/40 to-purple-600/40">
                       {project.image || '💼'}
@@ -272,13 +297,36 @@ export default function ProjectsGallery() {
               </button>
 
               {/* Image */}
-              <div className="relative w-full rounded-xl overflow-hidden bg-black">
+              <div className="relative w-full rounded-xl overflow-hidden bg-black min-h-[240px]">
+                {img && !loadedImages[img] && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                    <svg
+                      className="w-8 h-8 animate-spin text-white/40"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z" />
+                    </svg>
+                  </div>
+                )}
                 {img && (
                   <img
+                    key={img}
                     src={img}
                     alt={selected.project.title}
-                    className="w-full max-h-[75vh] object-contain"
+                    onLoad={() => markImageLoaded(img)}
+                    onError={() => markImageLoaded(img)}
+                    className={`w-full max-h-[75vh] object-contain transition-opacity duration-300 ${
+                      loadedImages[img] ? 'opacity-100' : 'opacity-0'
+                    }`}
                   />
+                )}
+                {imgs.length > 1 && (
+                  <span className="absolute left-4 top-4 z-10 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
+                    {selected.imageIndex + 1} / {imgs.length}
+                  </span>
                 )}
 
                 {imgs.length > 1 && (

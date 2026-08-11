@@ -25,6 +25,11 @@ export function Projects() {
   const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
   const [popupProjectId, setPopupProjectId] = useState<string | null>(null);
   const [popupImageIndex, setPopupImageIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+
+  const markImageLoaded = (url: string) => {
+    setLoadedImages((prev) => (prev[url] ? prev : { ...prev, [url]: true }));
+  };
 
   const parseImageUrls = (value: string | null): string[] => {
     if (!value) return [];
@@ -159,13 +164,38 @@ export function Projects() {
                   >
                     <div className="relative h-44 sm:h-52 bg-gradient-to-br from-cyan-500/25 to-violet-600/25 flex items-center justify-center text-5xl sm:text-6xl overflow-hidden">
                       {currentImageUrl ? (
-                        <img
-                          src={currentImageUrl}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
+                        <>
+                          {!loadedImages[currentImageUrl] && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                              <svg
+                                className="w-7 h-7 animate-spin text-white/40"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z" />
+                              </svg>
+                            </div>
+                          )}
+                          <img
+                            key={currentImageUrl}
+                            src={currentImageUrl}
+                            alt={project.title}
+                            onLoad={() => markImageLoaded(currentImageUrl)}
+                            onError={() => markImageLoaded(currentImageUrl)}
+                            className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+                              loadedImages[currentImageUrl] ? 'opacity-100' : 'opacity-0'
+                            }`}
+                          />
+                        </>
                       ) : (
                         project.image || '💼'
+                      )}
+                      {imageUrls.length > 1 && (
+                        <span className="absolute top-2 right-2 z-10 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                          {currentImageIndex + 1} / {imageUrls.length}
+                        </span>
                       )}
                       {imageUrls.length > 1 && (
                         <>
@@ -330,12 +360,35 @@ export function Projects() {
                     }
 
                     return (
-                      <div className="relative bg-black">
+                      <div className="relative bg-black min-h-[240px]">
+                        {!loadedImages[popupImage] && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                            <svg
+                              className="w-8 h-8 animate-spin text-white/40"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z" />
+                            </svg>
+                          </div>
+                        )}
                         <img
+                          key={popupImage}
                           src={popupImage}
                           alt={popupProject.title}
-                          className="w-full max-h-[80vh] object-contain"
+                          onLoad={() => markImageLoaded(popupImage)}
+                          onError={() => markImageLoaded(popupImage)}
+                          className={`w-full max-h-[80vh] object-contain transition-opacity duration-300 ${
+                            loadedImages[popupImage] ? 'opacity-100' : 'opacity-0'
+                          }`}
                         />
+                        {popupImages.length > 1 && (
+                          <span className="absolute left-4 top-4 z-10 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
+                            {popupImageIndex + 1} / {popupImages.length}
+                          </span>
+                        )}
                         {popupImages.length > 1 && (
                           <>
                             <button
